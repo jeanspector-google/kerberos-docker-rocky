@@ -1,0 +1,31 @@
+# Dockerfile - machine
+#
+# see docker-compose.yml
+
+FROM quay.io/rockylinux/rockylinux:8.8-ubi
+
+# kerberos client
+RUN dnf -y install chrony krb5-workstation krb5-libs
+
+# ssh client
+RUN dnf -y install openssh-clients
+
+# python web server configuration
+COPY ./nodes/machine/index.html .
+
+# kerberos client configuration
+ENV KRB5_CONFIG=/etc/krb5.conf
+COPY ./services/krb5/client/krb5.conf /etc/krb5.conf
+
+# ssh client configuration
+COPY ./services/ssh/client/ssh_config /etc/ssh/ssh_config
+
+# supervisor
+RUN dnf -y install epel-release
+RUN dnf -y install supervisor
+RUN mkdir -p /var/log/supervisord
+# supervisord configuration
+COPY ./nodes/machine/supervisord.conf /etc/supervisord.conf
+
+# when container is starting
+CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisord.conf"]

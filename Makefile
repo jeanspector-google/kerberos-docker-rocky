@@ -24,8 +24,8 @@ ifeq ($(shell which docker-compose),)
 endif
 
 # check variables coherence
-ifeq ($(filter $(OS_CONTAINER), ubuntu centos),)
-  $(error variable OS_CONTAINER is bad defined '$(OS_CONTAINER)', do make <option> <target> ... OS_CONTAINER=<os> possible values: ubuntu centos)
+ifeq ($(filter $(OS_CONTAINER), ubuntu centos rockylinux),)
+  $(error variable OS_CONTAINER is bad defined '$(OS_CONTAINER)', do make <option> <target> ... OS_CONTAINER=<os> possible values: ubuntu centos rockylinux)
 endif
 
 .PHONY: usage
